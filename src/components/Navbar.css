@@ -1,0 +1,115 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(10, 10, 10, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 2px solid var(--color-red);
+}
+
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: baseline;
+  gap: 0.2rem;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  letter-spacing: 0.08em;
+}
+
+.logo-drag { color: var(--color-white); }
+.logo-mob { color: var(--color-red); }
+
+.logo-sub {
+  font-family: var(--font-condensed);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--color-gray);
+  margin-left: 0.4rem;
+  text-transform: uppercase;
+  align-self: center;
+}
+
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.navbar-nav a {
+  font-family: var(--font-condensed);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-gray-light);
+  transition: color 0.2s;
+}
+
+.navbar-nav a:hover,
+.navbar-nav a.active {
+  color: var(--color-red-bright);
+}
+
+.navbar-fb {
+  background: var(--color-red);
+  color: var(--color-white) !important;
+  padding: 0.4rem 1rem;
+  border-radius: 2px;
+  transition: background 0.2s !important;
+}
+
+.navbar-fb:hover {
+  background: var(--color-red-bright);
+  color: var(--color-white) !important;
+}
+
+.navbar-burger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+}
+
+.navbar-burger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--color-white);
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.navbar-burger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.navbar-burger.open span:nth-child(2) { opacity: 0; }
+.navbar-burger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+@media (max-width: 768px) {
+  .navbar-burger { display: flex; }
+
+  .navbar-nav {
+    display: none;
+    position: fixed;
+    inset: 64px 0 0 0;
+    background: var(--color-black);
+    flex-direction: column;
+    justify-content: center;
+    gap: 2.5rem;
+  }
+
+  .navbar-nav.open { display: flex; }
+
+  .navbar-nav a {
+    font-size: 2rem;
+  }
+}
