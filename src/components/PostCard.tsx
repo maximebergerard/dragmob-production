@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom';
-import type { Post } from '../data/posts';
+import type { Article } from '../lib/supabase';
+import { CATEGORY_LABELS } from '../lib/supabase';
 import './PostCard.css';
 
 interface Props {
-  post: Post;
+  post: Article;
   featured?: boolean;
 }
 
@@ -17,8 +18,8 @@ export default function PostCard({ post, featured = false }: Props) {
   return (
     <Link to={`/blog/${post.slug}`} className={`post-card ${featured ? 'featured' : ''}`}>
       <div className="post-card-image">
-        <img src={post.coverImage} alt={post.title} loading="lazy" />
-        <span className="post-card-category">{post.categoryLabel}</span>
+        <img src={post.cover_image} alt={post.title} loading="lazy" />
+        <span className="post-card-category">{CATEGORY_LABELS[post.category]}</span>
       </div>
       <div className="post-card-body">
         <time className="post-card-date">{dateStr}</time>

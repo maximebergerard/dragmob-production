@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import { posts, type Category } from '../data/posts';
+import { useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
+import type { Article, Category } from '../lib/supabase';
 import PostCard from '../components/PostCard';
 import './Blog.css';
 
@@ -13,11 +14,28 @@ const CATEGORIES: { label: string; value: Category | 'all' }[] = [
 
 export default function Blog() {
   const [activeCategory, setActiveCategory] = useState<Category | 'all'>('all');
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filtered =
-    activeCategory === 'all'
-      ? posts
-      : posts.filter((p) => p.category === activeCategory);
+  useEffect(() => {
+    async function fetchArticles() {
+      let query = supabase
+        .from('articles')
+        .select('*')
+        .eq('published', true)
+        .order('date', { ascending: false });
+
+      if (activeCategory !== 'all') {
+        query = query.eq('category', activeCategory);
+      }
+
+      const { data } = await query;
+      setArticles(data ?? []);
+      setLoading(false);
+    }
+
+    fetchArticles();
+  }, [activeCategory]);
 
   return (
     <main className="blog-page">
@@ -42,21 +60,26 @@ export default function Blog() {
             <button
               key={cat.value}
               className={`filter-btn ${activeCategory === cat.value ? 'active' : ''}`}
-              onClick={() => setActiveCategory(cat.value)}
+              onClick={() => { setLoading(true); setActiveCategory(cat.value); }}
             >
               {cat.label}
             </button>
           ))}
         </div>
 
-        <div className="blog-grid">
-          {filtered.map((post) => (
-            <PostCard key={post.slug} post={post} />
-          ))}
-        </div>
-
-        {filtered.length === 0 && (
-          <div className="blog-empty">Aucun article dans cette catégorie pour le moment.</div>
+        {loading ? (
+          <div className="blog-empty">Chargement…</div>
+        ) : (
+          <>
+            <div className="blog-grid">
+              {articles.map((post) => (
+                <PostCard key={post.slug} post={post} />
+              ))}
+            </div>
+            {articles.length === 0 && (
+              <div className="blog-empty">Aucun article dans cette catégorie pour le moment.</div>
+            )}
+          </>
         )}
       </div>
     </main>

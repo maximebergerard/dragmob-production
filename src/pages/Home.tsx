@@ -1,10 +1,22 @@
 import { Link } from 'react-router-dom';
-import { posts } from '../data/posts';
+import { useEffect, useState } from 'react';
+import { supabase } from '../lib/supabase';
+import type { Article } from '../lib/supabase';
 import PostCard from '../components/PostCard';
 import './Home.css';
 
 export default function Home() {
-  const latestPosts = posts.slice(0, 3);
+  const [latestPosts, setLatestPosts] = useState<Article[]>([]);
+
+  useEffect(() => {
+    supabase
+      .from('articles')
+      .select('*')
+      .eq('published', true)
+      .order('date', { ascending: false })
+      .limit(3)
+      .then(({ data }) => setLatestPosts(data ?? []));
+  }, []);
 
   return (
     <main className="home">
@@ -90,22 +102,24 @@ export default function Home() {
       </section>
 
       {/* Latest posts */}
-      <section className="latest section">
-        <div className="container">
-          <div className="section-header">
-            <div>
-              <div className="section-label">Le blog</div>
-              <h2>Derniers articles</h2>
+      {latestPosts.length > 0 && (
+        <section className="latest section">
+          <div className="container">
+            <div className="section-header">
+              <div>
+                <div className="section-label">Le blog</div>
+                <h2>Derniers articles</h2>
+              </div>
+              <Link to="/blog" className="btn-outline">Tout voir →</Link>
             </div>
-            <Link to="/blog" className="btn-outline">Tout voir →</Link>
+            <div className="posts-grid">
+              {latestPosts.map((post, i) => (
+                <PostCard key={post.slug} post={post} featured={i === 0} />
+              ))}
+            </div>
           </div>
-          <div className="posts-grid">
-            {latestPosts.map((post, i) => (
-              <PostCard key={post.slug} post={post} featured={i === 0} />
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Facebook CTA */}
       <section className="fb-cta">
