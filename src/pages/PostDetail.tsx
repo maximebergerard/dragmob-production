@@ -54,6 +54,38 @@ export default function PostDetail() {
     fetchPost();
   }, [slug]);
 
+  useEffect(() => {
+    if (!post) return;
+
+    const title = `${post.title} — DRAGMOB Production`;
+    document.title = title;
+
+    const setMeta = (property: string, content: string, attr = 'property') => {
+      let el = document.querySelector(`meta[${attr}="${property}"]`);
+      if (!el) {
+        el = document.createElement('meta');
+        el.setAttribute(attr, property);
+        document.head.appendChild(el);
+      }
+      el.setAttribute('content', content);
+    };
+
+    const url = window.location.href;
+    setMeta('og:title', title);
+    setMeta('og:description', post.excerpt || '');
+    setMeta('og:image', post.cover_image || '');
+    setMeta('og:url', url);
+    setMeta('og:type', 'article');
+    setMeta('twitter:card', 'summary_large_image', 'name');
+    setMeta('twitter:title', title, 'name');
+    setMeta('twitter:description', post.excerpt || '', 'name');
+    setMeta('twitter:image', post.cover_image || '', 'name');
+
+    return () => {
+      document.title = 'DRAGMOB Production';
+    };
+  }, [post]);
+
   if (loading) {
     return (
       <main className="post-detail">
