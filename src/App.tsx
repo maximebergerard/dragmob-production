@@ -10,6 +10,7 @@ import MentionsLegales from './pages/MentionsLegales';
 import Login from './pages/admin/Login';
 import Dashboard from './pages/admin/Dashboard';
 import PostEditor from './pages/admin/PostEditor';
+import NotFound from './pages/NotFound';
 
 function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -36,6 +37,9 @@ function App() {
           <Route path="/admin/login" element={<Login />} />
           <Route path="/admin" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/admin/articles/:id" element={<ProtectedRoute><PostEditor /></ProtectedRoute>} />
+
+          {/* 404 */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

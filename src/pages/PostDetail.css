@@ -35,7 +35,9 @@
 }
 
 .btn-back {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   font-family: var(--font-condensed);
   font-size: 0.85rem;
   font-weight: 600;
@@ -139,6 +141,10 @@
 }
 
 .share-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
   font-family: var(--font-condensed);
   font-weight: 700;
   font-size: 0.85rem;
@@ -194,7 +200,10 @@
 }
 
 .btn-fb-sm {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
   background: #1877f2;
   color: var(--color-white);
   font-family: var(--font-condensed);

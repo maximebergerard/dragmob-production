@@ -74,7 +74,10 @@
 }
 
 .btn-primary {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
   background: var(--color-red);
   color: var(--color-white);
   font-family: var(--font-condensed);
@@ -90,7 +93,10 @@
 .btn-primary:hover { background: var(--color-red-bright); }
 
 .btn-secondary {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
   border: 2px solid var(--color-white);
   color: var(--color-white);
   font-family: var(--font-condensed);
@@ -109,7 +115,10 @@
 }
 
 .btn-outline {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
   border: 1px solid var(--color-red);
   color: var(--color-red);
   font-family: var(--font-condensed);
@@ -223,6 +232,7 @@
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
+  flex-wrap: wrap;
   margin-bottom: 2.5rem;
   gap: 1rem;
 }
@@ -317,7 +327,10 @@
 }
 
 .btn-fb {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
   background: #1877f2;
   color: var(--color-white);
   font-family: var(--font-condensed);
