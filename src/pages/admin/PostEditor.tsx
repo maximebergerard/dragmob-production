@@ -1,4 +1,5 @@
-import { useEffect, useState, FormEvent } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import type { FormEvent, ChangeEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { supabase, CATEGORY_LABELS } from '../../lib/supabase';
 import type { Article, Category } from '../../lib/supabase';
@@ -36,6 +37,9 @@ export default function PostEditor() {
   const [loading, setLoading] = useState(!isNew);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isNew) return;
@@ -69,6 +73,31 @@ export default function PostEditor() {
 
   function set<K extends keyof typeof EMPTY>(key: K, value: typeof EMPTY[K]) {
     setForm(f => ({ ...f, [key]: value }));
+  }
+
+  async function handleImageUpload(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadError('');
+    setUploading(true);
+
+    const ext = file.name.split('.').pop();
+    const path = `covers/${Date.now()}.${ext}`;
+
+    const { error: uploadErr } = await supabase.storage
+      .from('article-images')
+      .upload(path, file, { upsert: true });
+
+    if (uploadErr) {
+      setUploadError(uploadErr.message);
+      setUploading(false);
+      return;
+    }
+
+    const { data } = supabase.storage.from('article-images').getPublicUrl(path);
+    set('cover_image', data.publicUrl);
+    setUploading(false);
   }
 
   async function handleSubmit(e: FormEvent) {
@@ -195,13 +224,32 @@ export default function PostEditor() {
             <div className="form-group">
               <label>Image de couverture</label>
               <input
-                type="url"
-                value={form.cover_image}
-                onChange={e => set('cover_image', e.target.value)}
-                placeholder="https://…"
+                ref={fileInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                className="cover-file-input"
+                onChange={handleImageUpload}
               />
+              <button
+                type="button"
+                className="upload-btn"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploading}
+              >
+                {uploading ? 'Upload en cours…' : '📎 Choisir une image'}
+              </button>
+              {uploadError && <span className="upload-error">{uploadError}</span>}
               {form.cover_image && (
-                <img src={form.cover_image} alt="Prévisualisation" className="cover-preview" />
+                <>
+                  <img src={form.cover_image} alt="Prévisualisation" className="cover-preview" />
+                  <button
+                    type="button"
+                    className="cover-remove-btn"
+                    onClick={() => set('cover_image', '')}
+                  >
+                    Supprimer l'image
+                  </button>
+                </>
               )}
             </div>
 

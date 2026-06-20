@@ -217,3 +217,50 @@
   object-fit: cover;
   width: 100%;
 }
+
+.cover-file-input {
+  display: none;
+}
+
+.upload-btn {
+  background: #1a1a1a;
+  border: 1px dashed #444;
+  border-radius: 8px;
+  color: #aaa;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.875rem;
+  padding: 0.625rem 0.875rem;
+  text-align: left;
+  transition: border-color 0.2s, color 0.2s;
+  width: 100%;
+}
+
+.upload-btn:hover:not(:disabled) {
+  border-color: #e63312;
+  color: #e5e5e5;
+}
+
+.upload-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.upload-error {
+  color: #ff6b4a;
+  font-size: 0.75rem;
+}
+
+.cover-remove-btn {
+  background: transparent;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.cover-remove-btn:hover {
+  color: #ff6b4a;
+}
